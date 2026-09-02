@@ -1,0 +1,21 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/login.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/login"
+  to = "/"
+  status = 301

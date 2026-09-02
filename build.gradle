@@ -1,0 +1,153 @@
+plugins {
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}" apply false
+	id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
+	id 'maven-publish'
+}
+
+def deobfuscatedMinecraft = project.minecraft_version.toString() ==~ /^\d{2}\..*/
+def javaRelease = deobfuscatedMinecraft ? 25 : 21
+
+apply plugin: deobfuscatedMinecraft ? 'net.fabricmc.fabric-loom' : 'net.fabricmc.fabric-loom-remap'
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = 'combat-tracker'
+}
+
+tasks.withType(AbstractArchiveTask).configureEach {
+	archiveVersion = project.minecraft_version
+}
+
+repositories {
+	maven {
+		name = 'Terraformers'
+		url = 'https://maven.terraformersmc.com/releases/'
+	}
+	maven {
+		name = 'Shedaniel'
+		url = 'https://maven.shedaniel.me/'
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"combat_tracker" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+if (project.hasProperty('mixinDebug')) {
+	loom.runs.configureEach {
+		vmArg '-Dmixin.debug=true'
+		vmArg '-Dmixin.debug.verbose=true'
+	}
+}
+
+def sourceVariant = project.findProperty('sourceVariant')
+if (sourceVariant) {
+	def overlay = file("versions/${sourceVariant}/java")
+	if (!overlay.isDirectory()) {
+		throw new GradleException("No source variant at ${overlay}")
+	}
+	def mergedDir = layout.buildDirectory.dir("variant-src/${sourceVariant}")
+	def dropList = file("versions/${sourceVariant}/exclude.txt")
+	def drops = dropList.exists()
+			? dropList.readLines()*.trim().findAll { it && !it.startsWith('#') }
+			: []
+	def mergeVariant = tasks.register('mergeVariantSource', Sync) {
+		duplicatesStrategy = DuplicatesStrategy.INCLUDE
+		from('src/client/java')
+		from(overlay)
+		drops.each { exclude it }
+		into(mergedDir)
+	}
+	sourceSets.client.java.srcDirs = [mergedDir]
+
+	def resOverlay = file("versions/${sourceVariant}/resources")
+	if (resOverlay.isDirectory()) {
+		def mergedRes = layout.buildDirectory.dir("variant-res/${sourceVariant}")
+		def mergeVariantRes = tasks.register('mergeVariantResources', Sync) {
+			duplicatesStrategy = DuplicatesStrategy.INCLUDE
+			from('src/client/resources')
+			from(resOverlay)
+			into(mergedRes)
+		}
+		sourceSets.client.resources.srcDirs = [mergedRes]
+		tasks.matching { it.name in ['processClientResources', 'clientSourcesJar', 'sourcesJar'] }
+				.configureEach { dependsOn mergeVariantRes }
+	}
+
+	tasks.matching { it.name in ['compileClientJava', 'clientSourcesJar', 'sourcesJar'] }
+			.configureEach { dependsOn mergeVariant }
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	if (!deobfuscatedMinecraft) {
+		mappings loom.officialMojangMappings()
+	}
+
+	def modDep = deobfuscatedMinecraft ? 'implementation' : 'modImplementation'
+
+	add(modDep, "net.fabricmc:fabric-loader:${project.loader_version}")
+
+	add(modDep, "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
+
+	add(modDep, "com.terraformersmc:modmenu:${project.modmenu_version}")
+
+	add(modDep, "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+}
+
+processResources {
+	def version = project.version
+	def mcVersion = project.minecraft_version
+	inputs.property "version", version
+	inputs.property "minecraft_version", mcVersion
+
+	def javaFloor = javaRelease
+	inputs.property "java_release", javaFloor
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version, "minecraft_version": mcVersion, "java_release": javaFloor
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = javaRelease
+}
+
+tasks.register('reportPreview', JavaExec) {
+	group = 'verification'
+	description = 'Render a synthetic session report to build/preview'
+	classpath = sourceSets.client.runtimeClasspath
+	mainClass = 'combat_tracker.record.ReportPreview'
+	args = [project.findProperty('previewOut') ?: 'build/preview',
+			project.findProperty('previewEvents') ?: '120']
+}
+
+java {
+	withSourcesJar()
+
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(javaRelease)
+	}
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+	}
+}

@@ -1,0 +1,69 @@
+# gradle
+
+.gradle/
+build/
+out/
+classes/
+
+# eclipse
+
+*.launch
+
+# idea
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# vscode
+
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# macos
+
+*.DS_Store
+
+# windows
+
+Thumbs.db
+desktop.ini
+
+# fabric
+
+run/
+
+# java
+
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+# logs from gradle runs outside run/
+
+logs/
+*.log
+
+# relay (also covered by relay/.gitignore, kept here so a fresh clone is safe)
+
+node_modules/
+.netlify/
+
+# Cloudflare Worker local state
+.wrangler/
+
+# secrets — the relay reads ADMIN_PASSWORD / AUTH_SECRET from the environment, and
+# nothing in this repo should ever carry them
+
+.env
+.env.*
+!.env.example
+
+# local tooling state (dev-server config for this machine, not the project)
+
+.claude/

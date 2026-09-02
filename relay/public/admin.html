@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Combat Tracker — Admin</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="gate" id="gate" hidden>
+      <form class="login-card" id="gateForm">
+        <div class="brand">
+          <span class="dot" aria-hidden="true"></span>
+          <h1>Combat Tracker</h1>
+        </div>
+        <p class="login-sub">Admin password required to delete reports.</p>
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          aria-label="Admin password"
+          required
+        />
+        <button type="submit" id="gateSubmit">Unlock</button>
+        <p class="login-err" id="gateErr" hidden></p>
+        <a class="gate-back" href="/">← Back to reports</a>
+      </form>
+    </div>
+
+    <div id="panel" hidden>
+      <header class="top">
+        <div class="brand">
+          <span class="dot" aria-hidden="true"></span>
+          <h1>Combat Tracker</h1>
+          <span class="tag">admin</span>
+        </div>
+        <div class="controls">
+          <div class="search">
+            <input
+              id="search"
+              type="search"
+              placeholder="Search player…"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Search player"
+            />
+          </div>
+          <div class="session">
+            <button class="logout" id="logout" type="button">Sign out</button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="toolbar" id="toolbar">
+          <label class="select-all">
+            <input type="checkbox" id="selectAll" />
+            <span>Select all</span>
+          </label>
+          <span class="toolbar__count" id="selCount">Nothing selected</span>
+          <button class="btn btn--ghost" id="clearSel" type="button" hidden>
+            Clear
+          </button>
+          <button class="btn btn--danger" id="bulkDelete" type="button" disabled>
+            Delete selected
+          </button>
+        </div>
+        <p id="status" class="status">Loading…</p>
+        <section id="cards" class="grid" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <dialog id="confirmDlg" class="dlg" aria-labelledby="dlgTitle">
+      <form method="dialog" id="dlgForm" class="dlg__form">
+        <h2 class="dlg__title" id="dlgTitle">Delete report</h2>
+        <div class="dlg__who" id="dlgWho" hidden></div>
+        <p class="dlg__body" id="dlgBody"></p>
+        <fieldset class="dlg__scope" id="dlgScope" hidden>
+          <legend class="sr-only">What to delete</legend>
+          <label class="scope">
+            <input type="radio" name="scope" value="one" checked />
+            <span id="scopeOne">This report only</span>
+          </label>
+          <label class="scope">
+            <input type="radio" name="scope" value="player" />
+            <span id="scopePlayer"></span>
+          </label>
+        </fieldset>
+        <p class="dlg__warn">This cannot be undone.</p>
+        <div class="dlg__actions">
+          <button class="btn btn--ghost" id="dlgCancel" value="cancel">
+            Cancel
+          </button>
+          <button class="btn btn--danger" id="dlgOk" value="confirm">Delete</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <script src="/admin.js" type="module"></script>
+  </body>
+</html>

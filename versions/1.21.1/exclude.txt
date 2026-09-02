@@ -1,0 +1,2 @@
+# No Inventory.setSelectedSlot before 1.21.5, so this mixin cannot bind.
+combat_tracker/mixin/InventoryMixin.java

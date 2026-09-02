@@ -1,0 +1,10 @@
+{
+  "name": "combat-tracker-relay",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dashboard that receives and displays Combat Tracker synthetic-input reports.",
+  "dependencies": {
+    "@netlify/blobs": "^11.0.0"
+  }
+}

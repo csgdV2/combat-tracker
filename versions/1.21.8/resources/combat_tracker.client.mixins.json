@@ -1,0 +1,21 @@
+{
+	"required": true,
+	"package": "combat_tracker.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"LivingEntityMixin",
+		"MultiPlayerGameModeMixin",
+		"MinecraftMixin",
+		"MouseHandlerMixin",
+		"InventoryMixin",
+		"ClientPacketListenerMixin",
+		"ClientCommonPacketListenerImplMixin",
+		"KeyboardHandlerMixin",
+		"KeyMappingMixin",
+		"ToggleKeyMappingMixin",
+		"GuiMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

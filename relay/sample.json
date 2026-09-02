@@ -1,0 +1,39 @@
+{
+  "sessionId": "11111111-2222-3333-4444-555555555555-1737590400000",
+  "player": "SampleUser",
+  "uuid": "11111111-2222-3333-4444-555555555555",
+  "accountType": "Cracked",
+  "server": "hypixel.net",
+  "startUtc": "2026-08-22 18:00:00 UTC",
+  "endUtc": "2026-08-22 18:04:12 UTC",
+  "detected": ["Synthetic Attack", "Synthetic Keybind Press"],
+  "flags": { "hotbar": 0, "use": 0, "attack": 3, "keybind": 5 },
+  "sources": [
+    {
+      "kind": "keybind",
+      "type": "EXTERNAL",
+      "detail": "called from thread \"macro-worker-1\"",
+      "count": 5,
+      "suspects": ["AutoHotkey", "Logitech G HUB"]
+    },
+    {
+      "kind": "attack",
+      "type": "MOD",
+      "modId": "turboclicker",
+      "modName": "Turbo Clicker",
+      "modVersion": "2.4.1",
+      "detail": "mixin handler in net.minecraft.client.Minecraft.handler$zzz000$turboclicker$onStartAttack",
+      "count": 2,
+      "suspects": []
+    },
+    {
+      "kind": "attack",
+      "type": "UNKNOWN",
+      "detail": "reached by reflection; the caller is not on the stack",
+      "count": 1,
+      "suspects": []
+    }
+  ],
+  "html": "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Sample report</title></head><body style=\"background:#0e0f13;color:#e7e9ee;font-family:system-ui;padding:40px\"><h1>Sample Combat Tracker report</h1><p>Synthetic Attack ×3, Synthetic Keybind Press ×5.</p></body></html>",
+  "canonical": "{\"mod\":\"Combat Tracker\",\"player\":\"SampleUser\"}"
+}

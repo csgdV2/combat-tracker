@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Combat Tracker — Reports</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <span class="dot" aria-hidden="true"></span>
+        <h1>Combat Tracker</h1>
+        <span class="tag">flagged sessions</span>
+      </div>
+      <div class="controls">
+        <div class="search">
+          <input
+            id="search"
+            type="search"
+            placeholder="Search player…"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Search player"
+          />
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <p id="status" class="status">Loading…</p>
+      <section id="grid" class="grid" aria-live="polite"></section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

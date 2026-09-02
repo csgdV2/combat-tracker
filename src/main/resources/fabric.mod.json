@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "combat_tracker",
+	"version": "${version}",
+	"name": "Combat Tracker",
+	"description": "A mod that tracks your combat statistics.",
+	"authors": [
+		"csgd"
+	],
+	"icon": "assets/combat_tracker/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"combat_tracker.CombatTrackerClient"
+		],
+		"modmenu": [
+			"combat_tracker.integration.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		{
+			"config": "combat_tracker.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.17.0",
+		"minecraft": "${minecraft_version}",
+		"java": ">=${java_release}",
+		"fabric-api": "*",
+		"cloth-config": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
+	}
+}
